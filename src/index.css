@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add general styles for responsiveness */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+canvas {
+  width: 100%; /* Adjust width to fill its container */
+  height: 80vh; /* Set height to a larger percentage of the viewport height */
+}
+
+/* Flex container adjustments */
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Adjust container sizes for small screens */
+@media (max-width: 768px) {
+  .w-1\/3 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+
+  .text-lg {
+    font-size: 1.125rem;
+  }
+
+  .text-xl {
+    font-size: 1.25rem;
+  }
+
+  .p-4 {
+    padding: 1rem;
+  }
+
+  .table-auto {
+    font-size: 0.875rem;
+  }
+}
