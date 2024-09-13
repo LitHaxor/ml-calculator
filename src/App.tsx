@@ -259,12 +259,33 @@ const App: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100 overflow-hidden">
-      <div className="flex-1 flex flex-col items-center justify-center p-4 overflow-hidden">
+      <div className="flex-1 flex flex-col items-center justify-around p-4 overflow-hidden">
         <canvas
           ref={canvasRef}
           className="border-2 border-gray-400 w-full h-96" // Responsive sizing
           onClick={handleCanvasClick}
         />
+        <div className="flex w-full bg-black text-white p-4 rounded-md flex-col items-center justify-center mt-4">
+          <p>
+            Contributer{" "}
+            <a
+              href="https://www.github.com/lithaxor"
+              className="text-blue-500"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LitHaxor ❤️
+            </a>{" "}
+            <a
+              href="https://github.com/LitHaxor/ml-calculator.git"
+              className="text-blue-500"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Github
+            </a>
+          </p>
+        </div>
       </div>
       <div className="w-full md:w-1/3 p-4 bg-white overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">Label Tools</h2>
