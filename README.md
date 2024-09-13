@@ -1,50 +1,74 @@
-# React + TypeScript + Vite
+# Machine Learning Basic Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the Machine Learning Basic Calculator repository! This tool provides essential functionalities for evaluating and visualizing machine learning models, including PCA, performance metrics, and confusion matrix visualization.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **PCA Visualization:** Calculate and visualize Principal Component Analysis (PCA) for dimensionality reduction.
+- **Performance Metrics:** Compute and display key metrics, including accuracy, precision, F1 score, and recall.
+- **Confusion Matrix:** Generate and visualize the confusion matrix for model evaluation.
+- **Canvas Annotations:** Draw and place labels on the canvas for enhanced data visualization.
 
-## Expanding the ESLint configuration
+## Screenshots
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+**Canvas and Performance Metrics Tables**
 
-- Configure the top-level `parserOptions` property like this:
+![Canvas and Performance Metrics](https://github.com/user-attachments/assets/a6f836c3-50f2-4157-bf8f-bea195986419)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+**Canvas and Confusion Matrix**
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+![Canvas and Confusion Matrix](https://github.com/user-attachments/assets/f07889c3-fb70-4fb4-a941-d5aa0de514cf)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Getting Started
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+To get started with the Machine Learning Basic Calculator, follow these steps:
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/yourusername/machine-learning-basic-calculator.git
+   ```
+
+2. **Navigate to the Project Directory:**
+
+   ```bash
+   cd machine-learning-basic-calculator
+   ```
+
+3. **Install Dependencies with Bun:**
+
+   Install Bun if you haven't already, then use it to install project dependencies:
+
+   ```bash
+   bun install
+   ```
+
+4. **Run the Development Server with Vite:**
+
+   Start the Vite development server:
+
+   ```bash
+   bun run dev
+   ```
+
+5. **Open the Application:**
+
+   Open your browser and navigate to `http://localhost:3000` to view the application.
+
+## Contributing
+
+We welcome contributions to improve this tool. If you would like to contribute, please follow these guidelines:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Create a new Pull Request.
+
+For detailed contribution guidelines, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+## Author
+
+- **Hasan Ahamed**
+
+Feel free to reach out to the author for any questions or suggestions.
