@@ -39,7 +39,7 @@ const App: React.FC = () => {
         const sectionWidth = canvas.width / labels.length;
 
         labels.forEach((label, index) => {
-          ctx.fillStyle = `${label.color}80`; // Apply transparency
+          ctx.fillStyle = `${label.color}50`; // Apply transparency
           ctx.fillRect(index * sectionWidth, 0, sectionWidth, canvas.height);
           ctx.fillStyle = "black";
           ctx.font = "20px Arial";
@@ -169,23 +169,25 @@ const App: React.FC = () => {
         FN = 0,
         TN = 0;
 
-      points.forEach((point) => {
-        if (point.label === labelName && point.actualLabel === labelName) {
-          TP++; // True Positive
-        } else if (
-          point.label === labelName &&
-          point.actualLabel !== labelName
-        ) {
-          FP++; // False Positive
-        } else if (
-          point.label !== labelName &&
-          point.actualLabel === labelName
-        ) {
-          FN++; // False Negative
-        } else {
-          TN++; // True Negative
+      for (const predictedLabel in matrix) {
+        for (const actualLabel in matrix[predictedLabel]) {
+          if (predictedLabel === labelName && actualLabel === labelName) {
+            TP += matrix[predictedLabel][actualLabel];
+          } else if (
+            predictedLabel === labelName &&
+            actualLabel !== labelName
+          ) {
+            FP += matrix[predictedLabel][actualLabel];
+          } else if (
+            predictedLabel !== labelName &&
+            actualLabel === labelName
+          ) {
+            FN += matrix[predictedLabel][actualLabel];
+          } else {
+            TN += matrix[predictedLabel][actualLabel];
+          }
         }
-      });
+      }
 
       metrics[labelName] = { TP, FP, FN, TN };
     });
@@ -208,10 +210,10 @@ const App: React.FC = () => {
     labels.forEach((label) => {
       const { TP, FP, FN, TN } = metrics[label.name];
 
-      const precision = TP / (TP + FP || 1);
-      const recall = TP / (TP + FN || 1);
-      const accuracy = (TP + TN) / (TP + FP + FN + TN || 1);
-      const f1Score = (2 * precision * recall) / (precision + recall || 1);
+      const precision = TP / (TP + FP) || 0;
+      const recall = TP / (TP + FN) || 0;
+      const accuracy = (TP + TN) / (TP + FP + FN + TN) || 0;
+      const f1Score = (2 * precision * recall) / (precision + recall) || 0;
 
       metricsByLabel[label.name] = {
         precision: precision.toFixed(2) || "0",
@@ -259,38 +261,30 @@ const App: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100 overflow-hidden">
-      <div className="flex-1 flex flex-col items-center justify-around p-4 overflow-hidden">
+      <nav className="w-full bg-neutral-900 text-white p-4">
+        <h1 className="text-2xl font-bold">
+          Classification Metrics Calculator
+        </h1>
+      </nav>
+
+      <div className="flex-1 flex mx-5 md:mx-10 bg-white my-5 rounded-md shadow-lg flex-col items-start gap-4 p-4 overflow-hidden">
+        <h4 className="text-xl font-bold text-right">Draw Features</h4>
+        <p>Draw points on the canvas to evaluate the classification metrics.</p>
         <canvas
           ref={canvasRef}
-          className="border-2 border-gray-400 w-full h-96" // Responsive sizing
+          className="shadow-xl rounded-md border-gray-400 w-full h-96"
           onClick={handleCanvasClick}
         />
-        <div className="flex w-full bg-black text-white p-4 rounded-md flex-col items-center justify-center mt-4">
-          <p>
-            Contributer{" "}
-            <a
-              href="https://www.github.com/lithaxor"
-              className="text-blue-500"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LitHaxor ❤️
-            </a>{" "}
-            <a
-              href="https://github.com/LitHaxor/ml-calculator.git"
-              className="text-blue-500"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Github
-            </a>
-          </p>
-        </div>
       </div>
-      <div className="w-full md:w-1/3 p-4 bg-white overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">Label Tools</h2>
+      <div className="w-full md:w-1/3 p-4 m-6 shadow-xl rounded-md bg-white overflow-y-auto">
+        <h2 className="text-xl font-bold mb-4">
+          Classification Tools - Metrics and Confusion Matrix
+        </h2>
+        <hr className="my-4" />
         <form onSubmit={handleLabelSubmit} className="flex flex-col mb-4">
-          <label className="text-lg font-bold mb-2">Add Label</label>
+          <label className="text-md font-bold mb-2">
+            Add a new label (Max. 6)
+          </label>
           <input
             type="text"
             value={currentLabel}
@@ -302,14 +296,14 @@ const App: React.FC = () => {
           <div className="flex flex-row w-full justify-around items-center">
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              className="bg-neutral-800 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
               Add Label
             </button>
             <button
               type="button"
               onClick={reset}
-              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+              className="bg-neutral-800 text-white px-4 py-2 rounded-md hover:bg-red-600"
             >
               Reset
             </button>
@@ -323,7 +317,9 @@ const App: React.FC = () => {
             selectedLabel ? "text-green-500" : "text-red-500"
           }`}
         >
-          Select labels
+          {selectedLabel
+            ? `Selected Label: ${selectedLabel}`
+            : "Please select a label to place on the canvas."}
         </p>
 
         <div className="flex flex-wrap gap-4 mb-4">
@@ -349,8 +345,8 @@ const App: React.FC = () => {
             onClick={() => setActiveTab("classification")}
             className={`px-4 py-2 rounded-md ${
               activeTab === "classification"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300"
+                ? "bg-neutral-800 text-white"
+                : "bg-neutral-300"
             }`}
           >
             Classification Metrics
@@ -359,8 +355,8 @@ const App: React.FC = () => {
             onClick={() => setActiveTab("confusion")}
             className={`px-4 py-2 rounded-md ${
               activeTab === "confusion"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300"
+                ? "bg-slate-800 text-white"
+                : "bg-slate-500 text-white"
             }`}
           >
             Confusion Matrix
@@ -494,6 +490,22 @@ const App: React.FC = () => {
                       </td>
                     ))}
                   </tr>
+
+                  <tr>
+                    <td className="border px-4 py-2 font-bold">TN</td>
+                    {labels.map((label) => (
+                      <td key={label.name} className="border px-4 py-2">
+                        {
+                          points.filter(
+                            (point) =>
+                              point.actualLabel !== label.name &&
+                              point.label !== label.name
+                          ).length
+                        }
+                      </td>
+                    ))}
+                  </tr>
+
                   <tr>
                     <td className="border px-4 py-2 font-bold">FP</td>
                     {labels.map((label) => (
@@ -524,21 +536,6 @@ const App: React.FC = () => {
                   </tr>
 
                   <tr>
-                    <td className="border px-4 py-2 font-bold">TN</td>
-                    {labels.map((label) => (
-                      <td key={label.name} className="border px-4 py-2">
-                        {
-                          points.filter(
-                            (point) =>
-                              point.actualLabel !== label.name &&
-                              point.label !== label.name
-                          ).length
-                        }
-                      </td>
-                    ))}
-                  </tr>
-
-                  <tr>
                     <td className="border px-4 py-2 font-bold">Accuracy</td>
                     {labels.map((label) => (
                       <td>{metricsByLabel[label.name].accuracy}</td>
@@ -549,6 +546,27 @@ const App: React.FC = () => {
             }
           </div>
         )}
+      </div>
+      <div className="flex w-full shadow-lg text-white p-4 bg-neutral-900 rounded-md flex-col items-center justify-center mt-4">
+        <p>
+          Contributer{" "}
+          <a
+            href="https://www.github.com/lithaxor"
+            className="text-blue-500"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LitHaxor ❤️
+          </a>{" "}
+          <a
+            href="https://github.com/LitHaxor/ml-calculator.git"
+            className="text-blue-500"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Github
+          </a>
+        </p>
       </div>
     </div>
   );
